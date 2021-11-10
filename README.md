@@ -1,10 +1,8 @@
-Helmsman
+
 ======
 Helmsman: https://github.com/Praqma/helmsman
-RollingUpdate
 ======
 RollingUpdate: https://kubernetes.io/ru/docs/tutorials/kubernetes-basics/update/update-intro/
-Kubedog
 ======
 Kubedog: https://github.com/werf/kubedog
 Flux
