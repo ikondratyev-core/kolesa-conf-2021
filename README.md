@@ -1,6 +1,6 @@
-
+Helmsman
 ======
-Helmsman: https://github.com/Praqma/helmsman
+https://github.com/Praqma/helmsman
 ======
 RollingUpdate: https://kubernetes.io/ru/docs/tutorials/kubernetes-basics/update/update-intro/
 ======
