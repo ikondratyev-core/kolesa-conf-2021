@@ -1,0 +1,32 @@
+image: $CI_REGISTRY/docker-images/helm:2.11.1
+
+variables:
+  KUBECONFIG: /etc/deploy/config
+
+stages:
+  - deploy
+
+before_script:
+  - mkdir -p /etc/deploy
+  - echo ${KUBE_CONFIG} | base64 -d > ${KUBECONFIG}
+  - export RELEASE_NAME="${CI_BUILD_REF_SLUG}"
+  - export DEPLOYS=$(helm ls | grep ${RELEASE_NAME} | wc -l)
+  - helm version
+
+k8s-deploy:
+  stage: deploy
+  tags:
+    - docker
+  script:
+    - cp deployer.git tmp
+    - mv tmp/* .
+    - ./helm-deploy.sh -n $RELEASE_NAME -ns $RELEASE_NAME
+
+k8s-destroy:
+  stage: deploy
+  tags:
+    - docker
+  script:
+    - echo "Removing namespace $RELEASE_NAME"
+    - helm delete --purge $RELEASE_NAME
+  when: manual

@@ -1,0 +1,20 @@
+namespaces:
+  ${CI_BUILD_REF_SLUG}: 
+
+preconfiguredHelmRepos:
+  - projects
+
+appsTemplates:
+  default: &default
+    namespace: ${CI_BUILD_REF_SLUG}
+    enabled: true
+    chart: "projects/default"
+    version: "0.1.0"
+    wait: true
+
+apps:
+  ${CI_BUILD_REF_SLUG}-platform:
+    <<: *default
+    valuesFile: "vars/platform.yml"
+    set:
+      image.name: "git-registry.egs.kz/platform/platform:main-10732"

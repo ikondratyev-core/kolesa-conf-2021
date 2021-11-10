@@ -1,0 +1,29 @@
+image: $CI_REGISTRY/docker-images/alpine-python-pgcli
+
+stages:
+  - deploy
+
+stop_stage_environment:
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - echo "Removing namespace $CI_BUILD_REF_SLUG"
+    - 'curl -X DELETE --header "Authorization: Bearer $EGS_K8S_TOKEN" https://kubernetes.default/api/v1/namespaces/$CI_BUILD_REF_SLUG'
+  when: manual
+  environment:
+    name: test/$CI_BUILD_REF_NAME
+    action: stop
+
+kubernetes-deploy:
+  stage: deploy
+  tags:
+    - deploy
+  environment:
+    name: test/$CI_BUILD_REF_NAME
+    url: https://$CI_BUILD_REF_SLUG-cbs.sanscrit.io
+  when: manual    
+  script:
+    - cp environment-deployer tmp
+    - mv tmp/* .
+    - python environment-deployer.py $CI_BUILD_REF_SLUG $EGS_K8S_TOKEN kubernetes.default $CI_PROJECT_NAMESPACE

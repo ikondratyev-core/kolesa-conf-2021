@@ -1,0 +1,27 @@
+image: "git-registry.egs.kz/docker-images/helmsman:3.6.2"
+
+stages:
+  - check
+  - deploy
+
+.deploy:
+  before_script:
+    - mkdir -p ~/.kube
+    - echo ${KUBE_DEV_CONFIG} | base64 -d > ~/.kube/config
+
+k8s-prod-check:
+  extends: .deploy
+  stage: check
+  retry: 2
+  only:
+    - branches
+  script:
+    - helmsman -keep-untracked-releases -update-deps -dry-run -f manifest.yml
+
+k8s-prod-deploy:
+  extends: .deploy
+  stage: deploy
+  only:
+    - branches
+  script:
+     - helmsman -keep-untracked-releases -update-deps -apply -f manifest.yml

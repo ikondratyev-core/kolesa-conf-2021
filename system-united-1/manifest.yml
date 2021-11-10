@@ -1,0 +1,89 @@
+version: 1
+services:
+  admin-panel:
+    image: registry.gitlab.com/kelproject/admin-panel
+    version: "0.14"
+    requiresDb: true
+    dumpDb: false
+    ports:
+    - port: 3000
+      protocol: TCP
+      name: http
+    env:
+    - name: DB_HOST
+      value: pgdb-admin-panel
+    - name: DB_NAME
+      value: admin_panel
+    - name: DBMIGRATION_USER
+      value: admin_panel
+    - name: DBMIGRATION_PASS
+      value: df464DFL360aleKKfw3516KJ3KL
+    - name: DB_USER
+      value: admin_panel_user
+    - name: DB_PASS
+      value: k392ZHeNMGxWo7HTWc8GznYiHbB    
+  site:
+    image: registry.gitlab.com/kelproject/site
+    version: "0.20"
+    requiresDb: false
+    dumpDb: false
+    ports:
+    - port: 3000
+      protocol: TCP
+      name: http    
+    env:
+    - name: DB_HOST
+      value: pgdb-admin-panel
+    - name: DB_NAME
+      value: admin_panel
+    - name: DBMIGRATION_USER
+      value: admin_panel
+    - name: DBMIGRATION_PASS
+      value: df464DFL360aleKKfw3516KJ3KL
+    - name: DB_USER
+      value: admin_panel_user
+    - name: DB_PASS
+      value: k392ZHeNMGxWo7HTWc8GznYiHbB    
+    mount:
+      volumeMounts:
+      - mountPath: /etc/localtime
+        name: timezone
+      - mountPath: /var/www/public/system
+        name: files        
+      volumes:
+      - name: timezone
+        hostPath:
+          path: /usr/share/zoneinfo/Asia/Almaty     
+      - name: files
+        hostPath:
+          path: /srv/kelproject/master/site   
+  user-service:
+    image: registry.gitlab.com/kelproject/user-service
+    version: "0.0.4"
+    requiresDb: true
+    dumpDb: false
+    ports:
+    - port: 8888
+      protocol: TCP
+      name: http
+    env:
+    - name: DB_HOST
+      value: pgdb-user-service
+    - name: DB_NAME
+      value: user_service
+    - name: DBMIGRATION_USER
+      value: user_service
+    - name: DBMIGRATION_PASS
+      value: df464DFL360aleKKfw3516KJ3KL
+    - name: DB_USER
+      value: user_service
+    - name: DB_PASS
+      value: df464DFL360aleKKfw3516KJ3KL          
+    mount:
+      volumeMounts:
+      - mountPath: /etc/localtime
+        name: timezone
+      volumes:
+      - name: timezone
+        hostPath:
+          path: /usr/share/zoneinfo/Asia/Almaty

@@ -1,0 +1,6 @@
+values.yaml
+jobs.yaml
+secrets.yaml
+cronjobs.yaml
+configmaps.yaml
+*.yaml

@@ -1,0 +1,15 @@
+services:
+  - name: admin-panel
+    image: "registry.gitlab.com/kelproject/admin-panel:0.14"
+    ports:
+    - name: http
+      port: 3000
+    env:
+    - name: VARIABLE
+      value: "HELLO WORLD"
+    volumeMounts:
+    ...
+    volumes:
+    ...
+    ingress:
+    ...
